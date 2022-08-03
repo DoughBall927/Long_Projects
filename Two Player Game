@@ -1,0 +1,356 @@
+import time
+import random
+
+
+#yo
+
+
+
+
+
+#This code was written by DoughBall927
+
+
+
+
+#So this game is basically about two people shoving trash at each other, and they can create tools to dig for resources, which can be sold for coins. 
+
+
+"Note: the 'die' function is sort of a reverse backdoor, giving the user a disadvantage - this can be used to willingly make it easier for the other player to win. 
+
+
+loop = True
+while loop:
+    toolsavailable = ["hands","mini shovel","shovel","long shovel"]
+    itemsavailable = ["mini shovel","shovel","long shovel","sock","stick","dirtpile","string","woodplank","stone"]
+    oneattacking = False
+    twoattacking = False
+    onekeep = ""
+    rounds = 0
+    twokeep = ""
+    onecoins = 0
+    twocoins = 0
+    twotools = ["hands"]
+    tworubbish = ["stone"]
+    onetools = ["hands"]
+    onerubbish = ["stone"]
+    x = 0
+    oneinventory = []
+    twoinventory = []
+    actions = ["i","inventory","d","dig","a","attack","defend","c","craft","def","die"]
+    
+    print("Welcome to rubbish, a game of teamwork and betrayal... in space! ")
+    time.sleep(0.25)
+    print("just kidding")
+    time.sleep(0.1)
+    one = input("User 1: ")
+    two = input("User 2: ")
+
+    #users have been named
+
+    start = random.randint(1,100)
+
+    loop3 = True
+    while loop3:
+        if rounds > 100:
+            print("This has gone on for too long. ")
+            print("You both win! You survived the game. ")
+            while True:
+                print("GAME OVER")
+        start += 1
+        if start%2 == 1:
+            
+            #player one
+            print(oneinventory)
+            print(onerubbish)
+            print(onecoins)
+            print(one+"'s turn")
+            loop2 = True
+            while loop2:
+                if len(onerubbish) > 10:
+                    print(one,"has lost the game! ")
+                    KeyboardInterrupt()
+                    while True:
+                        print("GAME OVER")
+                    pass
+                action = input("What do you want to do? You can dig, sell your items, check your inventory, attack, defend, or craft. ").lower()
+                if action in actions:
+                    loop2 = False
+                    if action == "i" or action == "inventory":
+                        print(oneinventory)
+                        print(onerubbish)
+                    if action == "d" or action == "dig":
+                        if "long shovel" in oneinventory:
+                            x = 15
+                        elif "shovel" in oneinventory:
+                            x = 10
+                        elif "mini shovel" in oneinventory:
+                            x = 5
+                        else:
+                            x = 0
+                            #idk maybe they lose the shovel and x has to go back to zero
+                        dig = random.randint(x,20)
+                        if dig < 1:
+                            dig = "sock"
+                            oneinventory.append(dig)
+                        elif dig < 10:
+                            dig = "dirtpile"
+                            oneinventory.append(dig)
+                        elif dig < 15:
+                            dig = "stick"
+                            oneinventory.append(dig)
+                        elif dig < 17:
+                            dig = "string"
+                            oneinventory.append(dig)
+                        elif dig < 19:
+                            dig = "woodplank"
+                            oneinventory.append(dig)
+                        else:
+                            dig = "stone"
+                            onerubbish.append(dig)
+                        print("You found a "+dig+"!")
+                        print()
+                        time.sleep(0.25)
+                    if action == "a" or action == "attack":
+                        if onerubbish != []:
+                            print("You put a",onerubbish[0],"in the hole and push. ")
+                            oneattacking = True
+                            del onerubbish[0]
+                        else:
+                            print("You need rubbish to do that. ")
+                    if action == "def" or action == "defend":
+                        if "dirtpile" in oneinventory:
+                            oneinventory.remove("dirtpile")
+                            if twoattacking and random.randint(0,20) > random.randint(0,20):
+                                print("You defended an attack by pushing dirt in the hole. ")
+                                tworubbish.append("stone")
+                                twoattacking = False
+                            elif twoattacking:
+                                print("You were attacked! The dirt wall breaks. ")
+                                onerubbish.append("stone")
+                            else:
+                                print("No attack arrives and you take down the wall. ")
+                                oneinventory.append("dirtpile")
+                    if action == "c" or action == "craft":
+                        print()
+                        print()
+                        if set(["stick","stick","woodplank"]) <= set(oneinventory) and not ("long shovel" in oneinventory):
+                            #craft best item first to prioritise
+                            print("You use two sticks and a woodplank to make a long shovel. ")
+                            oneinventory.append("long shovel")
+                            oneinventory.remove("stick")
+                            oneinventory.remove("stick")
+                            oneinventory.remove("woodplank")
+                        elif set(["stick","woodplank"]) <= set(oneinventory) and not (("shovel" in oneinventory) or ("long shovel" in inventory)):
+                            print("You use a stick and a woodplank to craft a shovel. ")
+                            twoinventory.append("shovel")
+                            twoinventory.remove("stick","woodplank")
+                        elif set(["stick","woodplank"]) <= set(twoinventory) and not (("shovel" in twoinventory) or ("long shovel" in twoinventory) or ("mini shovel" in twoinventory)):
+                            print("You turn a woodplank into a mini shovel. ")
+                            twoinventory.append("mini shovel")
+                            twoinventory.remove("woodplank")
+                    if action == "s" or action == "sell":
+                        loop3 = True
+                        while loop3:
+                            print("Are you sure? ")
+                            yn = input("y/n")
+                            if yn == "y":
+                                if "long shovel" in oneinventory:
+                                    onekeep = "long shovel"
+                                elif "shovel" in oneinventory:
+                                    onekeep = "shovel"
+                                elif "mini shovel" in oneinventory:
+                                    onekeep = "mini shovel"
+                                else:
+                                    pass
+                                number = -1
+                                while oneinventory != []:
+                                    onespecimen = oneinventory[0]
+                                    number += 1
+                                    if onespecimen == "shovel" != onekeep:
+                                        onecoins += 2
+                                    elif onespecimen == "long shovel" != onekeep:
+                                        onecoins += 3
+                                    else:
+                                        onecoins += 1
+                                    del oneinventory[0]
+                                print(oneinventory)
+                                oneinventory = [onekeep]
+                    if action == "die":
+                        onerubbish.append("stone")
+                        print("lol")
+                        print("You gain stones. ")
+                        print(onerubbish)
+                        print(len(onerubbish))
+                    if twoattacking:
+                        print("You were attacked. You gain one stone. ")
+                        twoattacking = False
+                        onerubbish.append("stone")
+                else:
+                    print("You can't do that. ")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#sorry, its not tidy, but hey at least it works
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        if start%2 == 0:
+            print(two+"'s turn")
+            #player two
+            print(twoinventory)
+            print(tworubbish)
+            print(twocoins)
+            loop2 = True
+            while loop2:
+                if len(tworubbish) > 10:
+                    print(two,"has lost the game! ")
+                    KeyboardInterrupt()
+                    while True:
+                        print("GAME OVER")
+                    pass
+                action = input("What do you want to do? You can dig, sell your items, check your inventory, attack, defend, or craft. ").lower()
+                if action in actions:
+                    loop2 = False
+                    if action == "i" or action == "inventory":
+                        print(twoinventory)
+                        print(onerubbish)
+                    if action == "d" or action == "dig":
+                        if "long shovel" in twoinventory:
+                            x = 15
+                        elif "shovel" in twoinventory:
+                            x = 10
+                        elif "mini shovel" in twoinventory:
+                            x = 5
+                        else:
+                            x = 0
+                            #idk maybe they lose the shovel and x has to go back to zero
+                        dig = random.randint(x,20)
+                        if dig < 1:
+                            dig = "sock"
+                            twoinventory.append(dig)
+                        elif dig < 10:
+                            dig = "dirtpile"
+                            twoinventory.append(dig)
+                        elif dig < 15:
+                            dig = "stick"
+                            twoinventory.append(dig)
+                        elif dig < 17:
+                            dig = "string"
+                            twoinventory.append(dig)
+                        elif dig < 19:
+                            dig = "woodplank"
+                            twoinventory.append(dig)
+                        else:
+                            dig = "stone"
+                            tworubbish.append(dig)
+                        print("You found a "+dig+"!")
+                        print()
+                        time.sleep(0.25)
+                    if action == "a" or action == "attack":
+                        if tworubbish != []:
+                            print("You put a", tworubbish[0],"in the hole and push. ")
+                            twoattacking = True
+                            del tworubbish[0]
+                        else:
+                            print("You need rubbish to do that. ")
+                    if action == "def" or action == "defend":
+                        if "dirtpile" in twoinventory:
+                            twoinventory.remove("dirtpile")
+                            if oneattacking and random.randint(0,20) > random.randint(0,20):
+                                print("You defended an attack by pushing dirt in the hole. ")
+                                onerubbish.append("stone")
+                                oneattacking = False
+                            elif oneattacking:
+                                print("You were attacked! The dirt wall breaks. ")
+                                tworubbish.append("stone")
+                            else:
+                                print("No attack arrives and you take down the wall. ")
+                                twoinventory.append("dirtpile")
+                        else:
+                            print("You fail to do so, having no building materials. ")
+                    if action == "c" or action == "craft":
+                        print()
+                        print()
+                        if set(["stick","stick","woodplank"]) <= set(twoinventory) and not ("long shovel" in twoinventory):
+                            #craft best item first to prioritise
+                            print("You use two sticks and a woodplank to make a long shovel. ")
+                            twoinventory.append("long shovel")
+                            twoinventory.remove("stick")
+                            twoinventory.remove("stick")
+                            twoinventory.remove("woodplank")
+                        elif set(["stick","woodplank"]) <= set(twoinventory) and not (("shovel" in twoinventory) or ("long shovel" in twoinventory)):
+                            print("You use a stick and a woodplank to craft a shovel. ")
+                            twoinventory.append("shovel")
+                            twoinventory.remove("stick","woodplank")
+                        elif set(["stick","woodplank"]) <= set(twoinventory) and not (("shovel" in twoinventory) or ("long shovel" in twoinventory) or ("mini shovel" in twoinventory)):
+                            print("You turn a woodplank into a mini shovel. ")
+                            twoinventory.append("mini shovel")
+                            twoinventory.remove("woodplank")
+                    if action == "s" or action == "sell":
+                        loop3 = True
+                        while loop3:
+                            print("Are you sure? ")
+                            yn = input("y/n")
+                            if yn == "y":
+                                if "long shovel" in twoinventory:
+                                    twokeep = "long shovel"
+                                elif "shovel" in twoinventory:
+                                    twokeep = "shovel"
+                                elif "mini shovel" in twoinventory:
+                                    twokeep = "mini shovel"
+                                else:
+                                    pass
+                                number = -1
+                                while twoinventory != []:
+                                    twospecimen = twoinventory[0]
+                                    number += 1
+                                    if twospecimen == "shovel" != twokeep:
+                                        twocoins += 2
+                                    elif twospecimen == "long shovel" != twokeep:
+                                        twocoins += 3
+                                    else:
+                                        twocoins += 1
+                                    del twoinventory[0]
+                                print(twoinventory)
+                                twoinventory = [twokeep]
+                    if action == "die":
+                        tworubbish.append("stone")
+                        print("lol")
+                        print("You gain stones. ")
+                        print(tworubbish)
+                        print(len(tworubbish))
+                    if oneattacking:
+                        print("You were attacked. You gain one stone. ")
+                        oneattacking = False
+                        tworubbish.append("stone")
+                            
+                else:
+                    print("You can't do that. ")
+#doughball is my name and coding is my game
