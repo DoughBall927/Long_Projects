@@ -16,7 +16,7 @@ import random
 #So this game is basically about two people shoving trash at each other, and they can create tools to dig for resources, which can be sold for coins. 
 
 
-"Note: the 'die' function is sort of a reverse backdoor, giving the user a disadvantage - this can be used to willingly make it easier for the other player to win. 
+"Note: the 'die' function is sort of a reverse backdoor, giving the user a disadvantage - this can be used to willingly make it easier for the other player to win. "
 
 
 loop = True
